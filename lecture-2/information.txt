@@ -3,7 +3,7 @@ NAMING CONVENSIONS
 Python                  snake_notation      first_name, user_id, is_completed
 C#/C/C++                PascalCase          FirstName, UserId, IsCompleted
 Java/Javascript         camelCase           firstName, userId, isCompleted
-CSS                     kabab-case          btn-primary, section-header
+CSS                     kebab-case          btn-primary, section-header
 
 
 COMMON DATATYPES        Python              C#                          Java                JavaScript

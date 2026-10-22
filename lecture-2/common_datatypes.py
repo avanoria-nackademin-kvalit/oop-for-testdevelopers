@@ -2,7 +2,7 @@ name = "Hans"
 age = 42
 working_hours = 40.0
 is_employeed = True
-role = None 
+role = None
 
 print(name)
 print(age)
