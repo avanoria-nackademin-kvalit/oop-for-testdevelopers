@@ -1,0 +1,24 @@
+NAMING CONVENSIONS
+---------------------------------------------------------------------------------------------------------------
+Python                  snake_notation      first_name, user_id, is_completed
+C#/C/C++                PascalCase          FirstName, UserId, IsCompleted
+Java/Javascript         camelCase           firstName, userId, isCompleted
+CSS                     kabab-case          btn-primary, section-header
+
+
+
+COMMON DATATYPES        Python              C#                          Java                JavaScript
+---------------------------------------------------------------------------------------------------------------
+text/strängar           str                 string                      String              String
+heltal                  int                 int, long                   int                 Number
+decimaltal              float               float, double, decimal      double              Number
+sant/falsk              bool                bool                        boolean             boolean
+INGET                   None (NoneType)     null                        null                undefined
+
+
+DECLARE VARIABLES       Python              C#                          Java                JavaScript
+-------------------------------------------------------------------------------------------------------------
+DATATYPE-BASED          name                string name                 String name         name
+VALUE-BASED             name                var name                    var name            var name
+CONTANT-BASED           NAME                const name                  final name          const name
+                                                                                            let name
