@@ -6,19 +6,18 @@ Java/Javascript         camelCase           firstName, userId, isCompleted
 CSS                     kabab-case          btn-primary, section-header
 
 
-
 COMMON DATATYPES        Python              C#                          Java                JavaScript
 ---------------------------------------------------------------------------------------------------------------
-text/strängar           str                 string                      String              String
-heltal                  int                 int, long                   int                 Number
-decimaltal              float               float, double, decimal      double              Number
-sant/falsk              bool                bool                        boolean             boolean
-INGET                   None (NoneType)     null                        null                undefined
+text/strings            str                 string                      String              string
+whole numbers           int                 int, long, byte             int, long, byte     number
+decimal numbers         float               float, double, decimal      float, double       number
+true/false              bool                bool                        boolean             boolean
+Not specified           None (NoneType)     null                        null                null, undefined
 
 
 DECLARE VARIABLES       Python              C#                          Java                JavaScript
 -------------------------------------------------------------------------------------------------------------
 DATATYPE-BASED          name                string name                 String name         name
 VALUE-BASED             name                var name                    var name            var name
-CONTANT-BASED           NAME                const name                  final name          const name
+CONSTANT-BASED          NAME                const name                  final name          const name
                                                                                             let name
