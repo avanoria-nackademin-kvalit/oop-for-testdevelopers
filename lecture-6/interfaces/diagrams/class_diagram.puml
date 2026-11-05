@@ -1,0 +1,54 @@
+@startuml classdiagram
+    title CustomerService med interface
+
+    skinparam classAttributeIconSize 0
+
+
+    class CustomerDialog {
+        -customerService : ICustomerService
+        +AddCustomerOption() : void
+        +ShowCustomerOption() : void
+    }
+
+
+    interface ICustomerRepository {
+        +TryAdd(customer : Customer) : void
+        +GetAll() : Customer[0..*]
+    }
+
+    class InMemoryCustomerRepository {
+        -_customers : Customer[0..*]
+        +TryAdd(customer : Customer) : void
+        +GetAll() : Customer[0..*]
+    }
+
+    class DatabaseCustomerRepository {
+        +TryAdd(customer : Customer) : void
+        +GetAll() : Customer[0..*]
+    }
+
+    interface ICustomerService {
+        +AddCustomer(customer : Customer) : void
+        +GetAllCustomers() : Customer[0..*]
+    }
+
+    class CustomerService {
+        -customerRepository : ICustomerRepository
+        +AddCustomer(customer : Customer) : void
+        +GetAllCustomers() : Customer[0..*]
+    }
+
+    class Customer {
+        + CustomerName : string
+        + OrganizationNumber : string
+        + EmailAddress : string
+    }
+
+    CustomerDialog ..> ICustomerService : << använder >>
+    ICustomerService ..> Customer : << använder >>
+    ICustomerRepository ..> Customer : << använder >>
+    CustomerService ..> ICustomerRepository : << använder >>
+    CustomerService ..|> ICustomerService : << implementerar >>
+    InMemoryCustomerRepository ..|> ICustomerRepository : << implementerar >>
+    DatabaseCustomerRepository ..|> ICustomerRepository : << implementerar >>
+@enduml
