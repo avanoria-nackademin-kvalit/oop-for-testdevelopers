@@ -1,0 +1,68 @@
+@startuml classdiagram
+
+skinparam ClassAttributeIconSize 0
+title Customer Management Class Diagram
+
+class Customer {
+    + id : UUID
+    + first_name : str
+    + last_name : str
+    + email : str
+}
+
+class CreateCustomerDto {
+    + first_name : str
+    + last_name : str
+    + email : str
+}
+
+class CreateCustomerResult {
+    + succeeded : bool
+    + error_message : str | None
+    + customer : Customer | None
+}
+
+class GetCustomerResult {
+    + succeeded : bool
+    + error_message : str | None
+    + customers : Customer[0..*]
+}
+
+class CustomerRepository {
+    - __customers : Customer[0..*]
+    + add(customer : Customer) : None
+    + get_all() : Customer[0..*]
+}
+
+class CustomerService {
+    - repository : CustomerRepository
+    + create_customer(request: CreateCustomerDto) : CreateCustomerResult
+    + get_customers() : GetCustomerResult
+}
+
+class CustomerDialog {
+    - service : CustomerService
+    + create_option() : None
+    + list_option() : None
+    + main_menu() : None
+}
+
+class App {
+    + main() : None
+}
+
+CustomerRepository ..> Customer : använder
+
+CustomerService ..> CustomerRepository : använder
+CustomerService ..> CreateCustomerDto : använder
+CustomerService ..> CreateCustomerResult : använder
+CustomerService ..> GetCustomerResult : använder
+
+CustomerDialog ..> CustomerService : använder
+CustomerDialog ..> CreateCustomerDto : använder
+
+App ..> CustomerRepository : använder
+App ..> CustomerService : använder
+App ..> CustomerDialog : använder
+
+@enduml
