@@ -8,6 +8,8 @@ public class CustomerRepository : ICustomerRepository
 
     public Customer? Add(Customer customer)
     {
+        ArgumentNullException.ThrowIfNull(customer);
+
         _customers.Add(customer);
         return customer;
     }
