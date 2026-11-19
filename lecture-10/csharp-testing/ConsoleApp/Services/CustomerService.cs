@@ -5,12 +5,25 @@ namespace ConsoleApp.Services;
 
 public class CustomerService(ICustomerRepository repository) : ICustomerService
 {
+    public string? NormalizeName(string? value)
+    {
+        return value?.Trim();
+    }
+
+    public string? NormalizeEmail(string? value)
+    {
+        return value?.Trim().ToLowerInvariant();
+    }
+
+
     public CreateCustomerResult CreateCustomer(CreateCustomerDto dto)
     {
+        ArgumentNullException.ThrowIfNull(dto);
+
         // Normalisera
-        var firstName = dto.FirstName.Trim();
-        var lastName = dto.LastName.Trim();
-        var email = dto.Email.Trim().ToLowerInvariant();
+        var firstName = NormalizeName(dto.FirstName);
+        var lastName = NormalizeName(dto.LastName);
+        var email = NormalizeEmail(dto.Email);
 
         // Validera
         if (string.IsNullOrWhiteSpace(firstName))
@@ -20,7 +33,7 @@ public class CustomerService(ICustomerRepository repository) : ICustomerService
             return new CreateCustomerResult(false, "Last name is required", null);
 
         if (string.IsNullOrWhiteSpace(email))
-            return new CreateCustomerResult(false, "Email is required", null);
+            return new CreateCustomerResult(false, "Email address is required", null);
 
         // Skapa + Delegera
         var customer = new Customer
