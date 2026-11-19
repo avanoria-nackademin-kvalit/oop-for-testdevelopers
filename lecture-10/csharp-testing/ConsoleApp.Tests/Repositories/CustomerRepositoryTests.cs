@@ -1,7 +1,7 @@
 ﻿using ConsoleApp.Models;
 using ConsoleApp.Repositories;
 
-namespace ConsoleApp.Tests;
+namespace ConsoleApp.Tests.Repositories;
 
 public class CustomerRepositoryTests
 {
