@@ -1,0 +1,78 @@
+@startuml classdiagram
+
+skinparam ClassAttributeIconSize 0
+title Customer Management Class Diagram
+
+class Customer {
+    + Id : GUID
+    + FirstName : string
+    + LastName : string
+    + Email : string
+}
+
+record CreateCustomerDto {
+    + FirstName : string
+    + LastName : string
+    + Email : string
+}
+
+record CreateCustomerResult {
+    + Succeeded : bool
+    + ErrorMessage : string | null
+    + Customer : Customer | null
+}
+
+record GetCustomerResult {
+    + Succeeded : bool
+    + ErrorMessage : string | null
+    + Customers : Customer[0..*]
+}
+
+interface ICustomerRepository {
+    + Add(customer : Customer) : Customer | null
+    + GetAll() : Customer[0..*]
+}
+
+class CustomerRepository {
+    - _customers : Customer[0..*]
+    + Add(customer : Customer) : Customer | null
+    + GetAll() : Customer[0..*]
+}
+
+interface ICustomerService {
+    + CreateCustomer(dto: CreateCustomerDto) : CreateCustomerResult
+    + GetCustomers() : GetCustomerResult
+}
+
+class CustomerService {
+    - repository : ICustomerRepository
+    + CreateCustomer(dto: CreateCustomerDto) : CreateCustomerResult
+    + GetCustomers() : GetCustomerResult
+}
+
+class CustomerDialog {
+    - service : ICustomerService
+    + CreateOption() : void
+    + ListOption() : void
+    + MainMenu() : void
+}
+
+class Program {
+    {static} + Main() : void
+}
+
+CustomerRepository ..> Customer : uses
+CustomerRepository ..|> ICustomerRepository : implements
+
+CustomerService ..> CreateCustomerDto : uses
+CustomerService ..> CreateCustomerResult : uses
+CustomerService ..> GetCustomerResult : uses
+CustomerService ..> ICustomerRepository : uses
+CustomerService ..|> ICustomerService : implements
+
+CustomerDialog ..> CreateCustomerDto : uses
+CustomerDialog ..> ICustomerService : uses
+
+Program --> CustomerDialog : uses
+
+@enduml
