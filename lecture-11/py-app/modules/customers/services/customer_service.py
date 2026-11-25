@@ -1,21 +1,40 @@
 from dataclasses import dataclass
+from uuid import uuid4
 
-from models.save_customer_response import SaveCustomerResponse
+from modules.customers.repositories.customer_repository import CustomerRepository
+from modules.customers.models.create_customer_request import CreateCustomerRequest
+from modules.customers.models.create_customer_response import CreateCustomerResponse
+from modules.customers.models.error_status import ErrorStatus
+from modules.customers.models.customer import Customer
 
 @dataclass
 class CustomerService:
+    customer_repository: CustomerRepository
 
-    def save_customer(self):
-        # normalize data
+    def create_customer(self, form_data: CreateCustomerRequest) -> CreateCustomerResponse:
+        # normalize
+        first_name = form_data.first_name.strip()
+        last_name = form_data.last_name.strip()
+        email = form_data.email.strip()
 
-        # validate data
-            # return error message if not valid
-            return SaveCustomerResponse(False, "Invalid data")
+        # validate
+        if not first_name or not last_name or not email:
+            return CreateCustomerResponse(False, ErrorStatus.INVALID)
 
-        # save data
-            return SaveCustomerResponse(False, "duplicated data")
+        # exists with email
+        existing_customer = self.customer_repository.get_by_email(email)
+        if existing_customer:
+            return CreateCustomerResponse(False, ErrorStatus.DUPLICATE)
 
-            return SaveCustomerResponse(False, "Unable to save data")
+        # create
+        id = uuid4()
+        customer = Customer(id, first_name, last_name, email)
 
-        # return valid data
-        return SaveCustomerResponse(True, None)
+        # delegate
+        result = self.customer_repository.add(customer)
+
+        # return
+        if result.succeeded:
+            return CreateCustomerResponse(True, None, customer)
+
+        return CreateCustomerResponse(False, ErrorStatus.ERROR)

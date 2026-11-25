@@ -32,26 +32,31 @@ service -> service : normalize data
 service -> service : validate normalized data
 
 alt invalid data
-    service --> endpoint : return CreateCustomerResponse with error
+    service --> endpoint : return CreateCustomerResponse with invalid error
 else
+    service -> repository : getByEmail(email)
+    repository -> db : get customer
+    db --> repository : return customer or null
+    repository --> service : return customer or null
+
+    alt customer exists 
+        service --> endpoint : return CreateCustomerResponse with duplicate error
+    end
+
     service -> service : create Customer
     service -> repository: add(Customer)
-
     repository -> repository : validate data
 
     alt invalid data 
         repository --> service : return CreateCustomerResult with error
+    else
+        repository -> db : save customer
+        repository --> service : return CreateCustomerResult with success
     end
 
-    alt customer exists 
-        repository -> db : get customer
-        db --> repository : customer exists
-        repository --> service : return CreateCustomerResult with error
-    else (customer not exists)
-        repository -> db : save customer
-        db --> repository : saved with id
-        repository --> service : return CreateCustomerResult with saved customer
-    end
-service --> endpoint : return CreateCustomerResponse
+    alt customer saved
+        service --> endpoint : return CreateCustomerResponse with customer
+    else
+        service --> endpoint : return CreateCustomerResponse with error
 
 @enduml

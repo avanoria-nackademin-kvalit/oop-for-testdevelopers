@@ -2,17 +2,47 @@
 
 title Customer Management
 
+record CreateCustomerRequest {
+    + firstName: String
+    + lastName: String
+    + email: String
+}
+
 enum ErrorStatus {
     Invalid
     Duplicate
-    Unable
     Error
 }
 
-record SaveCustomerResponse {
-    + Succeeded : boolean
-    + ErrorMessage : ErrorStatus
+class Customer {
+    + id: UUID {readOnly}
+    + firstName: String
+    + lastName: String
+    + email: String   
+
+    + Customer(firstName: String, lastName: String, email: String)
 }
 
+record CreateCustomerResponse {
+    + succeeded: boolean
+    + errorStatus: ErrorStatus | null
+    + customer: Customer | null
+}
+
+record CreateCustomerResult {
+    + succeeded: boolean
+    + errorStatus: ErrorStatus | null
+}
+
+class CustomerService {
+    + customer_repository: CustomerRepository
+    + createCustomer(formData: CreateCustomerRequest) \n: CreateCustomerResponse
+}
+
+class CustomerRepository {
+    - customers: Customer[0..*]
+    + add(customer: Customer) : CreateCustomerResult
+    + getByEmail(email: String) : Customer | null
+}
 
 @enduml
