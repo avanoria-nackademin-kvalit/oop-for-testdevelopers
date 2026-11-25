@@ -1,0 +1,57 @@
+@startuml sequence-diagram
+title Register Customer
+
+actor Customer as customer
+participant UI as ui
+boundary "Endpoint" as endpoint
+control "Customer Service" as service
+participant "Customer Repository" as repository
+database "SQL Storage" as db
+
+
+customer -> ui : go to registration form
+ui --> customer : display registration form
+customer -> ui : enter form data
+ui -> ui : validate form data
+
+alt invalid data
+    ui --> customer : display invalid data
+end
+
+ui -> endpoint : send form data
+endpoint -> endpoint : validate incoming data
+
+alt invalid data
+    endpoint --> ui : invalid data
+    ui --> customer : display invalid data
+end
+
+endpoint -> service : createCustomer(CreateCustomerRequest)
+
+service -> service : normalize data
+service -> service : validate normalized data
+
+alt invalid data
+    service --> endpoint : return CreateCustomerResponse with error
+else
+    service -> service : create Customer
+    service -> repository: add(Customer)
+
+    repository -> repository : validate data
+
+    alt invalid data 
+        repository --> service : return CreateCustomerResult with error
+    end
+
+    alt customer exists 
+        repository -> db : get customer
+        db --> repository : customer exists
+        repository --> service : return CreateCustomerResult with error
+    else (customer not exists)
+        repository -> db : save customer
+        db --> repository : saved with id
+        repository --> service : return CreateCustomerResult with saved customer
+    end
+service --> endpoint : return CreateCustomerResponse
+
+@enduml

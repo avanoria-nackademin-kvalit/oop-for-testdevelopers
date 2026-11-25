@@ -1,0 +1,18 @@
+@startuml classdiagram
+
+title Customer Management
+
+enum ErrorStatus {
+    Invalid
+    Duplicate
+    Unable
+    Error
+}
+
+record SaveCustomerResponse {
+    + Succeeded : boolean
+    + ErrorMessage : ErrorStatus
+}
+
+
+@enduml

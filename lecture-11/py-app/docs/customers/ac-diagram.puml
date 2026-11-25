@@ -1,0 +1,35 @@
+@startuml activity-diagram
+
+title Register Customer
+
+start
+
+: open registration page;
+: fill out registration form;
+: validate registration form;
+
+if (valid form) then (yes)
+    : send data to backend;
+    : normalize data;
+    if (validate data) then (not valid)
+        : send data back with error message;
+        stop
+    else (valid)
+        : save data;
+        if (saved data) then (true);
+            : return saved data;
+            stop
+        else (false)
+            : return error message;
+            stop
+        endif
+    endif
+else (no)
+    : display error message;
+    end
+endif
+
+
+
+
+@enduml
